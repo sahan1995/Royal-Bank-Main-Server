@@ -45,10 +45,10 @@ public class BranchController {
     @HystrixCommand(fallbackMethod = "findByIDFallBack", commandKey = "findByID", groupKey = "findByID")
     @GetMapping(value = "/{ID}")
     public BranchDTO findByID(@PathVariable("ID") String Id) {
-        return restTemplate.getForEntity(serverone + "branches/" + Id, BranchDTO.class).getBody();
+        return restTemplate.getForEntity(serverthree + "branches/" + Id, BranchDTO.class).getBody();
     }
 
     public BranchDTO findByIDFallBack(String Id) {
-        return restTemplate.getForEntity(serverthree + "branches/" + Id, BranchDTO.class).getBody();
+        return restTemplate.getForEntity(serverone + "branches/" + Id, BranchDTO.class).getBody();
     }
 }

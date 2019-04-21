@@ -21,12 +21,20 @@ public class EmployeeController {
     @HystrixCommand(fallbackMethod = "addEmployeeFallBack", commandKey = "addEmployee", groupKey = "addEmployee")
     @PostMapping(value = "/{id}")
     public void addEmployee(@PathVariable("id") String empID, @RequestBody EmployeeDTO employeeDTO) {
-        restTemplate.postForEntity(serverone+"employees/"+empID,employeeDTO,null);
-    }
-
-
-    public void addEmployeeFallBack(String empID, EmployeeDTO employeeDTO) {
         restTemplate.postForEntity(servertwo+"employees/"+empID,employeeDTO,null);
     }
 
+    public void addEmployeeFallBack(String empID, EmployeeDTO employeeDTO) {
+        restTemplate.postForEntity(serverone+"employees/"+empID,employeeDTO,null);
+    }
+
+    @HystrixCommand(fallbackMethod = "findbyIDFallBack", commandKey = "findbyID", groupKey = "findbyID")
+    @GetMapping(value = "/{empID}")
+    public EmployeeDTO findbyID(@PathVariable("empID") String empID){
+        return restTemplate.getForEntity(servertwo+"employees/"+empID,EmployeeDTO.class).getBody();
+    }
+
+    public EmployeeDTO findbyIDFallBack( String empID){
+        return restTemplate.getForEntity(serverone+"employees/"+empID,EmployeeDTO.class).getBody();
+    }
 }

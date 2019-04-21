@@ -20,7 +20,7 @@ public class ATMCardController {
         restTemplate = new RestTemplate();
     }
 
-//    @HystrixCommand(fallbackMethod = "saveFallBack",commandKey = "save",groupKey = "save")
+    @HystrixCommand(fallbackMethod = "saveFallBack",commandKey = "save",groupKey = "save")
     @PostMapping
     public void save(@RequestBody ATMcardDTO atMcardDTO){
         restTemplate.postForEntity(serverone+"atmcards",atMcardDTO,null);

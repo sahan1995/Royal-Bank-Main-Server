@@ -26,11 +26,12 @@ public class BankAccountController {
     @HystrixCommand(fallbackMethod = "createAccountFallBack",commandKey = "createAccount",groupKey = "createAccount")
     @PostMapping(value = "/{id}")
     public void createAccount(@PathVariable("id") String accountNumber, @RequestBody BankAccountDTO bankAccountDTO){
-        restTemplate.postForEntity(serverone+"account"+accountNumber,bankAccountDTO,null);
+        restTemplate.postForEntity(serverone+"account/"+accountNumber,bankAccountDTO,null);
     }
 
     public void createAccountFallBack( String accountNumber, BankAccountDTO bankAccountDTO){
-        restTemplate.postForEntity(serverthree+"account"+accountNumber,bankAccountDTO,null);
+        System.out.println(bankAccountDTO);
+        restTemplate.postForEntity(serverthree+"account/"+accountNumber,bankAccountDTO,null);
     }
 
 
