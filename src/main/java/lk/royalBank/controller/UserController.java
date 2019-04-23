@@ -3,6 +3,7 @@ package lk.royalBank.controller;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lk.royalBank.dto.LoginDTO;
 import lk.royalBank.dto.LoginUserDTO;
+import lk.royalBank.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,5 +32,24 @@ public class UserController {
         System.out.println(loginDTO.getUserName());
         return restTemplate.postForEntity(serverthree+"users/login",loginDTO,LoginUserDTO.class).getBody();
     }
+    @HystrixCommand(fallbackMethod = "findBYIDFallBack", commandKey = "findBYID", groupKey = "findBYID")
+    @GetMapping(value = "/{uname}")
+    public UserDTO findBYID(@PathVariable("uname") String uname){
+        return restTemplate.getForEntity(servertwo+"users/"+uname,UserDTO.class).getBody();
+    }
 
+    public UserDTO findBYIDFallBack( String uname){
+        return restTemplate.getForEntity(serverthree+"users/"+uname,UserDTO.class).getBody();
+    }
+
+    @HystrixCommand(fallbackMethod = "changePasswordFallBack", commandKey = "changePassword", groupKey = "changePassword")
+    @PutMapping(path = "/change")
+    public void changePassword(@RequestParam("uname") String uname, @RequestParam("pass") String password){
+        restTemplate.put(servertwo+"users/change?uname="+uname+"&pass="+password,null);
+    }
+
+
+    public void changePasswordFallBack(String uname,  String password){
+        restTemplate.put(serverthree+"users/change?uname="+uname+"&pass="+password,null);
+    }
 }

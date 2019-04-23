@@ -53,12 +53,12 @@ public class BankAccountController {
     @GetMapping(value = {"/{accNO}"})
     public BankAccountDTO accountByID(@PathVariable("accNO") String accno){
 
-         return restTemplate.getForEntity(serverone+"account/"+accno,BankAccountDTO.class).getBody();
+         return restTemplate.getForEntity(serverthree+"account/"+accno,BankAccountDTO.class).getBody();
     }
 
     public BankAccountDTO accountByIDFallBack(String accno){
 
-        return restTemplate.getForEntity(serverthree+"account/"+accno,BankAccountDTO.class).getBody();
+        return restTemplate.getForEntity(serverone+"account/"+accno,BankAccountDTO.class).getBody();
     }
 
     @HystrixCommand(fallbackMethod = "doTransactionFallBack",commandKey = "doTransaction",groupKey = "doTransaction")

@@ -23,12 +23,12 @@ public class ClientController {
     @HystrixCommand(fallbackMethod = "findByIDFallBack", commandKey = "findByID", groupKey = "findByID")
     @GetMapping(value = "/{ID}")
     public ClientDTO findByID(@PathVariable("ID") String clientID){
-        return  restTemplate.getForEntity(serverone+"clients/"+clientID,ClientDTO.class).getBody();
+        return  restTemplate.getForEntity(servertwo+"clients/"+clientID,ClientDTO.class).getBody();
 
     }
 
     public ClientDTO findByIDFallBack(String clientID){
-        return  restTemplate.getForEntity(servertwo+"clients/"+clientID,ClientDTO.class).getBody();
+        return  restTemplate.getForEntity(serverone+"clients/"+clientID,ClientDTO.class).getBody();
 
     }
 }
